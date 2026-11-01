@@ -1,0 +1,10 @@
+# /etc/sudoers.d/claude-agent
+# Der Prüf-Benutzer "claude-agent" darf genau diese LESENDEN Befehle als root ausführen. Sonst nichts.
+# Installieren:  sudo install -m 440 agent-sudoers /etc/sudoers.d/claude-agent && sudo visudo -c
+# (agent-einrichten.sh legt genau diese Regel automatisch an.)
+#
+# Bewusst NICHT erlaubt:
+#  - die docker-Gruppe (wer docker darf, ist praktisch root)
+#  - "docker inspect" auf Container (zeigt deren Passwörter und API-Keys) und "docker exec"
+#  - alles, was etwas ändert (rm, restart, apt install, ufw allow ...)
+claude-agent ALL=(root) NOPASSWD: /usr/bin/docker ps, /usr/bin/docker ps *, /usr/bin/docker image inspect *, /usr/bin/docker logs *, /usr/sbin/ufw status, /usr/sbin/sshd -T, /usr/bin/ss -tulpnH
